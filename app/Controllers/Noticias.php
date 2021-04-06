@@ -96,4 +96,10 @@ class Noticias extends Controller
 
 	}
 
+    public function excluir($id = null){
+        $model = new NoticiasModel();
+        $model->delete($id);
+        return redirect('noticias');
+    }
+
 }
