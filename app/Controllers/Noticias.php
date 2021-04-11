@@ -9,10 +9,10 @@ class Noticias extends Controller
 	public function index()
 	{
         $model = new NoticiasModel();
-
         $data = [
             'title' => 'Ultimas Noticias',
-            'noticias' => $model->getNoticias()
+            'noticias' => $model->getNoticias(),
+            'session' => \Config\Services::session()
         ];
 
         echo view('templates/header', $data);
@@ -23,6 +23,7 @@ class Noticias extends Controller
 
     public function item($id = null)
 	{
+        $data['session'] = \Config\Services::session();
         $model = new NoticiasModel();
 
         $data['noticias'] = $model->getNoticias($id);
@@ -41,6 +42,11 @@ class Noticias extends Controller
 
     public function inserir()
 	{
+        $data['session'] = \Config\Services::session();
+        if(!$data['session']->get('logged_in')){
+            return redirect('login');
+        }
+
         helper('form');
         $data['title'] = 'Inserir Noticias';
 
@@ -51,7 +57,12 @@ class Noticias extends Controller
 	}
 
     public function gravar()
-    {
+    {          
+        $data['session'] = \Config\Services::session();
+        if(!$data['session']->get('logged_in')){
+            return redirect('login');
+        }
+
         helper('form');
         $model = new NoticiasModel();
         if($this->validate([
@@ -59,14 +70,50 @@ class Noticias extends Controller
             'autor'  => ['label' => 'Autor', 'rules'  => 'required|min_length[3]|max_length[100]'],
             'descricao'  => ['label' => 'Descrição', 'rules' => 'required|min_length[3]']
         ])){
+            $id = $this->request->getVar('id');
+            $titulo = $this->request->getVar('titulo');
+            $autor = $this->request->getVar('autor');
+            $descricao = $this->request->getVar('descricao');
+            $img = $this->request->getFile('img');
 
-            $model->save([
-                'id'        => $this->request->getVar('id'),
-                'titulo'    => $this->request->getVar('titulo'),
-                'autor'     => $this->request->getVar('autor'),
-                'descricao' => $this->request->getVar('descricao'),
-            ]);
-            return redirect('noticias');
+            if(!$img->isValid()){
+                $model->save([
+                    'id'        => $id,
+                    'titulo'    => $titulo,
+                    'autor'     => $autor,
+                    'descricao' => $descricao,
+                ]);
+                return redirect('noticias');
+                //echo 'Nao encontrou imagem';
+            }else{
+                $validaIMG = $this->validate([
+                    'img'   => [
+                        'uploaded[img]',
+                        'mime_in[img,image/jpg,image/jpeg,image/gif,image/png]',
+                        'max_size[img, 4096]',                  
+                    ]
+                ]);
+
+                if($validaIMG){
+                    $novoNome = $img->getRandomName();
+                    $img->move('img/noticias', $novoNome);
+
+                    $model->save([
+                        'id'        => $id,
+                        'titulo'    => $titulo,
+                        'autor'     => $autor,
+                        'descricao' => $descricao,
+                        'img'       => $novoNome
+                    ]);
+                    return redirect('noticias');
+
+                }else{
+                    $data['title'] = 'Erro ao Gravar a Noticia';
+                    echo view('templates/header', $data);
+                    echo view('pages/noticia_gravar');
+                    echo view('templates/footer');
+                }
+            }
         
         }else{
             $data['title'] = 'Erro ao Gravar a Noticia';
@@ -83,9 +130,14 @@ class Noticias extends Controller
 
         $data = [
             'title'     => 'Editar Noticia',
-            'noticias'  => $model->getNoticias($id)
+            'noticias'  => $model->getNoticias($id),
+            'session'   =>  \Config\Services::session()
         ];
 
+        if(!$data['session']->get('logged_in')){
+            return redirect('login');
+        }
+        
         if(empty($data['noticias'])){
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Não é possivel encontrar a noticia com id:'.$id);
         }
@@ -97,6 +149,12 @@ class Noticias extends Controller
 	}
 
     public function excluir($id = null){
+
+        $data['session'] = \Config\Services::session();
+        if(!$data['session']->get('logged_in')){
+            return redirect('login');
+        }
+
         $model = new NoticiasModel();
         $model->delete($id);
         return redirect('noticias');

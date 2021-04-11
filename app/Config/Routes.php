@@ -36,9 +36,10 @@ $routes->match(['get', 'post'], 'noticias/inserir', 'Noticias::inserir');
 $routes->match(['get', 'post'], 'noticias/gravar', 'Noticias::gravar');
 $routes->match(['get', 'post'], 'noticias/editar/(:num)', 'Noticias::editar/$1');
 $routes->match(['get', 'post'], 'noticias/excluir/(:num)', 'Noticias::excluir/$1');
-$routes->get('/noticias', 'Noticias::index');
-$routes->get('/login', 'Usuarios::index');
-$routes->get('/noticias/(:segment)', 'Noticias::item/$1');
+$routes->get('login', 'Usuarios::index');
+$routes->get('usuarios/logout', 'Usuarios::logout');
+$routes->get('noticias', 'Noticias::index');
+$routes->get('noticias/(:segment)', 'Noticias::item/$1');
 $routes->get('/', 'Pages::mostrar');
 $routes->get('(:any)', 'Pages::mostrar/$1');
 

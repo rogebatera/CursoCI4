@@ -13,7 +13,9 @@ Class Pages extends Controller{
             throw new \CodeIgniter\Exceptions\PageNotFoundException($page);
         }
         
-        echo view('templates/header');
+        $data['title'] = $page;
+
+        echo view('templates/header', $data);
         echo view('pages/'.$page);
         echo view('templates/footer');
     }
