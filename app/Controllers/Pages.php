@@ -13,11 +13,33 @@ Class Pages extends Controller{
             throw new \CodeIgniter\Exceptions\PageNotFoundException($page);
         }
         
-        $data['title'] = $page;
+        $data['title'] = ucfirst($page);
+        $data['session'] = \Config\Services::session();
+        $data['cache'] = \Config\Services::cache();
 
         echo view('templates/header', $data);
         echo view('pages/'.$page);
         echo view('templates/footer');
     }
 
+    public function limparCache(){
+        $data['cache'] = \Config\Services::cache();
+        $data['cache']->delete('escondeArea');
+
+        return redirect()->back()->withInput();
+    }
+
+    public function adicionarCache(){
+        $data['cache'] = \Config\Services::cache();
+        $data['cache']->increment('valorCache', 1);
+
+        return redirect()->back()->withInput();
+    }
+
+    public function subtrairCache(){
+        $data['cache'] = \Config\Services::cache();
+        $data['cache']->decrement('valorCache', 1);
+
+        return redirect()->back()->withInput();
+    }
 }
