@@ -21,6 +21,11 @@
             </div>
 <?php   
         endforeach;
+?>
+    <div>
+        <?= $pager->links(); ?>
+    </div>
+<?php        
     else:
 ?>
         <h3>Sem Noticias</h3>

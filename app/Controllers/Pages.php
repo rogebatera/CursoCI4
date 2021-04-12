@@ -16,6 +16,7 @@ Class Pages extends Controller{
         $data['title'] = ucfirst($page);
         $data['session'] = \Config\Services::session();
         $data['cache'] = \Config\Services::cache();
+        $data['cripto'] = \Config\Services::encrypter();
 
         echo view('templates/header', $data);
         echo view('pages/'.$page);
