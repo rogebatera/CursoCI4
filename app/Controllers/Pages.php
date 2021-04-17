@@ -2,7 +2,7 @@
 namespace App\Controllers;
 use CodeIgniter\Controller;
 
-Class Pages extends Controller{
+Class Pages extends BaseController{
 
     public function index(){
         return view('welcome_message1');

@@ -4,7 +4,7 @@ namespace App\Controllers;
 use CodeIgniter\Controller;
 use App\Models\NoticiasModel;
 
-class Noticias extends Controller
+class Noticias extends BaseController
 {
 	public function index()
 	{
