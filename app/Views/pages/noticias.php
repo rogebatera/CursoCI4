@@ -34,3 +34,11 @@
     endif
 ?>            
 </div>
+
+<div>
+    <?php
+        print '<pre>';
+        print_r($teste);
+        print '</pre>';
+    ?>
+</div>

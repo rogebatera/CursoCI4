@@ -23,4 +23,12 @@ class NoticiasModel extends Model{
         }
     }
 
+    public function getNoticiasTeste($titulo = null, $autor = null){
+        $this->orGroupStart();
+            $this->orWhere('titulo', $titulo);
+            $this->orWhere('autor', $autor);
+        $this->groupEnd();
+        return $this->asArray()->findAll();        
+    }
+    
 }

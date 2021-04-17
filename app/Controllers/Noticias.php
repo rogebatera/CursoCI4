@@ -10,10 +10,11 @@ class Noticias extends Controller
 	{
         $model = new NoticiasModel();
         $data = [
-            'title'    => 'Ultimas Noticias',
-            'noticias' => $model->paginate(1),
+            'title'     => 'Ultimas Noticias',
+            'noticias'  => $model->paginate(5),
             'pager'     => $model->pager,
-            'session'  => \Config\Services::session()
+            'session'   => \Config\Services::session(),
+            'teste'     => $model->getNoticiasTeste('teste', 'rogerio')
         ];
 
         echo view('templates/header', $data);
