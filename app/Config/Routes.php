@@ -39,6 +39,7 @@ $routes->match(['get', 'post'], 'noticias/excluir/(:num)', 'Noticias::excluir/$1
 $routes->get('login', 'Usuarios::index');
 $routes->get('usuarios/criar', 'Usuarios::criar');
 $routes->get('usuarios/logout', 'Usuarios::logout');
+$routes->get('noticias/listar_noticias', 'Noticias::listar_noticias');
 $routes->get('noticias', 'Noticias::index');
 $routes->get('noticias/(:segment)', 'Noticias::item/$1');
 $routes->get('limparCache', 'Pages::limparCache');

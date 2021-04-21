@@ -1,11 +1,17 @@
 <?php
 
 namespace App\Controllers;
-use CodeIgniter\Controller;
 use App\Models\NoticiasModel;
 
 class Noticias extends BaseController
 {
+    private $noticias;
+
+    public function __construct()
+    {
+        $this->noticias = new NoticiasModel();
+    }
+
 	public function index()
 	{
         $model = new NoticiasModel();
@@ -160,6 +166,21 @@ class Noticias extends BaseController
         $model = new NoticiasModel();
         $model->delete($id);
         return redirect('noticias');
+    }
+
+    public function listar_noticias()
+    {
+        //$teste = $this->noticias->getViewNoticias();
+        $data = [
+            'title'     => 'Ultimas Noticias',
+            'session'   => \Config\Services::session(),
+            'noticias'  => $this->noticias->getViewNoticias()->paginate(3),
+            'pager' => $this->noticias->getViewNoticias()->pager
+        ];
+        
+        echo view('templates/header', $data);
+        echo view('pages/listar_noticias');
+        echo view('templates/footer');      
     }
 
 }

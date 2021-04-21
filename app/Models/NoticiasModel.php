@@ -30,5 +30,18 @@ class NoticiasModel extends Model{
         $this->groupEnd();
         return $this->asArray()->findAll();        
     }
+
+    /*public function getViewNoticias(){
+        $db = \Config\Database::connect();
+        $builder = $db->table('View_noticia');
+        $query = $builder->get();
+        $query->getResultArray();
+        return $this;
+    }*/
+
+    public function getViewNoticias(){
+        $this->table = 'View_noticia';
+        return $this;
+    }
     
 }

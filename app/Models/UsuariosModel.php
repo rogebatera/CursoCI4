@@ -12,5 +12,5 @@ class UsuariosModel extends Model{
         return $this->asArray()->where(['user' => $user, 'senha' => md5($senha)])->first();
         
     }
-
+    
 }
